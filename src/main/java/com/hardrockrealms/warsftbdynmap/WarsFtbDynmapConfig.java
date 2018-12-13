@@ -14,7 +14,7 @@ public class WarsFtbDynmapConfig {
     @Config.Comment("The name of the layer on the Dynmap web page")
     public static String claims_layer_name = "Land Claims";
 
-    @Config.Comment("If true, Dynamp will show claims with the same colors as the teams have setup")
+    @Config.Comment("If true, Dynmap will show claims with the same colors as the FTB teams color")
     public static boolean enable_team_colors = true;
 
     @Config.Comment("The fill color of the claims if \"enable_team_colors\" is disabled")
