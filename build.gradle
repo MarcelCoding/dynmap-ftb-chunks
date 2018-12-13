@@ -1,0 +1,92 @@
+/*
+ * Gets the version name from the latest Git tag
+ */
+def getVersionName = { ->
+    def stdout = new ByteArrayOutputStream()
+    exec {
+        commandLine 'git', 'describe', '--tags'
+        standardOutput = stdout
+    }
+    return stdout.toString().trim()
+}
+
+buildscript {
+    repositories {
+        jcenter()
+        maven { url = "http://files.minecraftforge.net/maven" }
+        mavenLocal()
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+    }
+}
+apply plugin: 'net.minecraftforge.gradle.forge'
+apply plugin: 'maven'
+
+//version = getVersionName()
+version = "0.1"
+group = "com.hardrockrealms.warsftbdynmap"
+archivesBaseName = "WarsFtbDynmap"
+
+sourceCompatibility = targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
+compileJava {
+    sourceCompatibility = targetCompatibility = '1.8'
+}
+
+minecraft {
+    version = "1.12.2-14.23.5.2768"
+    runDir = "run"
+    mappings = "snapshot_20171003"
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+
+    // Maven repo for FTB Utilities
+    maven { url "https://maven.latmod.com/" }
+
+    // Maven repo for Dynmap
+    maven { url = "http://repo.mikeprimm.com" }
+}
+
+dependencies {
+    deobfProvided "com.feed_the_beast.mods:FTBLib:${ftblib_version}"
+    deobfProvided "com.feed_the_beast.mods:FTBUtilities:${ftbutilities_version}"
+    deobfProvided "us.dynmap:DynmapCoreAPI:${dynmapapi_version}"
+}
+
+processResources {
+    // this will ensure that this task is redone when the versions change.
+    inputs.property "version", project.version
+    inputs.property "mcversion", project.minecraft.version
+
+    // replace stuff in mcmod.info, nothing else
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mcmod.info'
+                
+        // replace version and mcversion
+        expand 'version':project.version, 'mcversion':project.minecraft.version
+    }
+        
+    // copy everything else except the mcmod.info
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'mcmod.info'
+    }
+}
+
+runClient {
+    //-PappArgs="['--username', '', '--password', '']"
+    if (project.hasProperty("appArgs")) {
+        args Eval.me(appArgs)
+    }
+}
+
+runServer {
+    //-PappArgs="['--username', '', '--password', '']"
+    if (project.hasProperty("appArgs")) {
+        args Eval.me(appArgs)
+    }
+}
+

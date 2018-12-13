@@ -1,0 +1,16 @@
+[
+{
+  "modid": "warsftbdynmap",
+  "name": "WarsFtbDynmap",
+  "description": "War's FTB Dynmap Integration Server Side mod",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["Warmad0311"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
