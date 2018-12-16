@@ -14,8 +14,8 @@ a bug report.
 
 ### Known Working Versions
 
-- FTBLibs 5.3.0.56
-- FTB Utilities 5.3.0.52
+- FTBLibs 5.3.0.56, 5.0.2.10
+- FTB Utilities 5.3.0.52, 5.0.2.10
 - Dynmap 3.0-beta-1-forge
 
 ## Configuration

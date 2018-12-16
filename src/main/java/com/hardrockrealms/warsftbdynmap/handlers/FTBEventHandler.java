@@ -30,7 +30,7 @@ public class FTBEventHandler {
                         chunkEvent.getChunk().getPos().dim,
                         team.getTitle().getUnformattedText(),
                         team.getDesc(),
-                        team.getColor().getColor().rgb());
+                        team.getColor().getColor().rgba() & 0x00FFFFFF);
 
                 WarsFtbDynmapMod.instance.queueClaimEventReceived(teamDim);
             }

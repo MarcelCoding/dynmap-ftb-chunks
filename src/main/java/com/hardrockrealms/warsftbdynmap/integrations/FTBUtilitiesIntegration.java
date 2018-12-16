@@ -22,11 +22,14 @@ public class FTBUtilitiesIntegration {
      */
 
     public static Set<ChunkPosition> getTeamClaimedChunks(TeamDimInfo teamDim) {
-        Set<ClaimedChunk> ftbClaimedChunks = ClaimedChunks.instance.getTeamChunks(Universe.get().getTeam(teamDim.getTeamID()), OptionalInt.of(teamDim.getDim()));
+        Collection<ClaimedChunk> ftbClaimedChunks = ClaimedChunks.instance.getAllChunks();
         Set<ChunkPosition> claimedChunkPositions = new HashSet<>();
+        ForgeTeam team = Universe.get().getTeam(teamDim.getTeamID());
 
         for (ClaimedChunk chunk : ftbClaimedChunks) {
-            claimedChunkPositions.add(new ChunkPosition(chunk.getPos().posX, chunk.getPos().posZ, chunk.getPos().dim));
+            if (!chunk.isInvalid() && chunk.getPos().dim == teamDim.getDim() && team.equalsTeam(chunk.getTeam())) {
+                claimedChunkPositions.add(new ChunkPosition(chunk.getPos().posX, chunk.getPos().posZ, chunk.getPos().dim));
+            }
         }
 
         return claimedChunkPositions;
@@ -45,7 +48,7 @@ public class FTBUtilitiesIntegration {
                     chunk.getPos().dim,
                     chunk.getTeam().getTitle().getUnformattedText(),
                     chunk.getTeam().getDesc(),
-                    chunk.getTeam().getColor().getColor().rgb());
+                    chunk.getTeam().getColor().getColor().rgba() & 0x00FFFFFF);
 
             teamDimList.add(teamDim);
         }
@@ -59,7 +62,7 @@ public class FTBUtilitiesIntegration {
 
         if (team != null) {
             for (ForgePlayer player: team.getMembers()) {
-                teamMembers.add(player.getDisplayName().getUnformattedText());
+                teamMembers.add(player.toString());
             }
         }
 

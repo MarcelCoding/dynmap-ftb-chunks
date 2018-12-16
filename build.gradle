@@ -12,7 +12,7 @@ buildscript {
 apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'maven'
 
-version = "1.1"
+version = "1.2"
 group = "com.hardrockrealms.warsftbdynmap"
 archivesBaseName = "WarsFtbDynmap"
 
@@ -22,7 +22,7 @@ compileJava {
 }
 
 minecraft {
-    version = "1.12.2-14.23.5.2768"
+    version = "1.12.2-14.23.3.2655"
     runDir = "run"
     mappings = "snapshot_20171003"
 }
