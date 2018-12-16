@@ -30,7 +30,7 @@ public class WarsFtbDynmapMod
 {
     public static final String MODID = "warsftbdynmap";
     public static final String NAME = "WarsFtbDynmap";
-    public static final String VERSION = "1.0";
+    public static final String VERSION = "1.1";
 
     private static final String DYNMAP_MODID = "dynmap";
     private static final String FTBUTILITIES_MODID = "ftbutilities";
@@ -55,7 +55,7 @@ public class WarsFtbDynmapMod
         logger = LogManager.getLogger(NAME);
         logger.info("Initializing War's FTB Dynmap Integration");
 
-        if (!Loader.isModLoaded(DYNMAP_MODID) && !Loader.isModLoaded(FTBUTILITIES_MODID)) {
+        if (!Loader.isModLoaded(DYNMAP_MODID) || !Loader.isModLoaded(FTBUTILITIES_MODID)) {
             m_bModEnabled = false;
             logger.error("FTB Utilities and or Dynmap does not appear to be installed. Disabling integration.");
         }
