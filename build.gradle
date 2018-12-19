@@ -12,7 +12,7 @@ buildscript {
 apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'maven'
 
-version = "1.2"
+version = "1.0.2"
 group = "com.hardrockrealms.warsftbdynmap"
 archivesBaseName = "WarsFtbDynmap"
 
@@ -52,11 +52,11 @@ processResources {
     // replace stuff in mcmod.info, nothing else
     from(sourceSets.main.resources.srcDirs) {
         include 'mcmod.info'
-                
+
         // replace version and mcversion
         expand 'version':project.version, 'mcversion':project.minecraft.version
     }
-        
+
     // copy everything else except the mcmod.info
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
@@ -76,4 +76,3 @@ runServer {
         args Eval.me(appArgs)
     }
 }
-
