@@ -1,0 +1,5 @@
+1.0.3 - Fixed world to dimension name mapping issue
+      - Fixed multiple renders occurring on startup
+      - Fixed crash when dynmap is unable to create marker sets.
+
+1.0.2 - Initial public release

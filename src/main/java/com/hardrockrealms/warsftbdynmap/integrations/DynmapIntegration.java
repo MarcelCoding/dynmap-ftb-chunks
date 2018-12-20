@@ -82,57 +82,61 @@ public class DynmapIntegration {
 
     public void createAreaMarker(TeamDimInfo teamDim, int groupIndex, List<PositionPoint> perimeterPoints)
     {
-        String worldName = getWorldName(teamDim.getDim());
-        String markerID = worldName + "_" + teamDim.getTeamID() + "_" + groupIndex;
+        if (m_DynmapMarkerSet != null) {
+            String worldName = getWorldName(teamDim.getDim());
+            String markerID = worldName + "_" + teamDim.getTeamID() + "_" + groupIndex;
 
-        double[] xList = new double[perimeterPoints.size()];
-        double[] zList = new double[perimeterPoints.size()];
+            double[] xList = new double[perimeterPoints.size()];
+            double[] zList = new double[perimeterPoints.size()];
 
-        for (int index = 0; index < perimeterPoints.size(); index++) {
-            xList[index] = perimeterPoints.get(index).getX();
-            zList[index] = perimeterPoints.get(index).getY();
-        }
-
-        // Build the data going in to the Dynmap tooltip
-        String stToolTip = "<div class=\"infowindow\">";
-
-        stToolTip += "<div style=\"text-align: center;\"><span style=\"font-weight:bold;\">" + teamDim.getTeamTitle() + "</span></div>";
-
-        if (!teamDim.getTeamDescription().isEmpty()) {
-            stToolTip += "<div style=\"text-align: center;\"><span>" + teamDim.getTeamDescription() + "</span></div>";
-        }
-
-        List<String> teamMembers = FTBUtilitiesIntegration.getTeamMembers(teamDim.getTeamID());
-
-        if (teamMembers.size() > 0) {
-            stToolTip += "<br><div style=\"text-align: center;\"><span style=\"font-weight:bold;\"><i>Team Members</i></span></div>";
-
-            for (String member : teamMembers) {
-                stToolTip += "<div style=\"text-align: center;\"><span>" + stripColorCodes(member) + "</span></div>";
-            }
-        }
-
-        stToolTip += "</div>";
-
-        // Create the area marker for the claim
-        AreaMarker marker = m_DynmapMarkerSet.createAreaMarker(markerID, stToolTip, true, worldName, xList, zList, false);
-
-        // Configure the marker style
-        if (marker != null) {
-            int nStrokeWeight = WarsFtbDynmapConfig.dynmap_border_weight;
-            double dStrokeOpacity = WarsFtbDynmapConfig.dynmap_border_opacity;
-            double dFillOpacity = WarsFtbDynmapConfig.dynmap_fill_opacity;
-            int nFillColor = Integer.parseInt(WarsFtbDynmapConfig.dynmap_fill_color, 16);
-
-            if (WarsFtbDynmapConfig.enable_team_colors) {
-                nFillColor = teamDim.getTeamColor();
+            for (int index = 0; index < perimeterPoints.size(); index++) {
+                xList[index] = perimeterPoints.get(index).getX();
+                zList[index] = perimeterPoints.get(index).getY();
             }
 
-            marker.setLineStyle(nStrokeWeight, dStrokeOpacity, nFillColor);
-            marker.setFillStyle(dFillOpacity, nFillColor);
+            // Build the data going in to the Dynmap tooltip
+            String stToolTip = "<div class=\"infowindow\">";
+
+            stToolTip += "<div style=\"text-align: center;\"><span style=\"font-weight:bold;\">" + teamDim.getTeamTitle() + "</span></div>";
+
+            if (!teamDim.getTeamDescription().isEmpty()) {
+                stToolTip += "<div style=\"text-align: center;\"><span>" + teamDim.getTeamDescription() + "</span></div>";
+            }
+
+            List<String> teamMembers = FTBUtilitiesIntegration.getTeamMembers(teamDim.getTeamID());
+
+            if (teamMembers.size() > 0) {
+                stToolTip += "<br><div style=\"text-align: center;\"><span style=\"font-weight:bold;\"><i>Team Members</i></span></div>";
+
+                for (String member : teamMembers) {
+                    stToolTip += "<div style=\"text-align: center;\"><span>" + stripColorCodes(member) + "</span></div>";
+                }
+            }
+
+            stToolTip += "</div>";
+
+            // Create the area marker for the claim
+            AreaMarker marker = m_DynmapMarkerSet.createAreaMarker(markerID, stToolTip, true, worldName, xList, zList, false);
+
+            // Configure the marker style
+            if (marker != null) {
+                int nStrokeWeight = WarsFtbDynmapConfig.dynmap_border_weight;
+                double dStrokeOpacity = WarsFtbDynmapConfig.dynmap_border_opacity;
+                double dFillOpacity = WarsFtbDynmapConfig.dynmap_fill_opacity;
+                int nFillColor = Integer.parseInt(WarsFtbDynmapConfig.dynmap_fill_color, 16);
+
+                if (WarsFtbDynmapConfig.enable_team_colors) {
+                    nFillColor = teamDim.getTeamColor();
+                }
+
+                marker.setLineStyle(nStrokeWeight, dStrokeOpacity, nFillColor);
+                marker.setFillStyle(dFillOpacity, nFillColor);
+            } else {
+                logger.error("Failed to create Dynmap area marker for claim.");
+            }
         }
         else {
-            logger.error("Failed to create Dynmap area marker for claim.");
+            logger.error("Failed to create Dynmap area marker for claim, Dynmap Marker Set is not available.");
         }
     }
 
@@ -172,14 +176,7 @@ public class DynmapIntegration {
         // This code below follows Dynmap's naming which is required to get mapping between dimensions and worlds
         // to work. As dynmap API takes world strings not dimension numbers.
         for (WorldServer world : worldsList) {
-            DimensionType dimType = world.provider.getDimensionType();
-
-            if (dimType == DimensionType.OVERWORLD) {
-                m_DimensionNames.put(dimType.getId(), world.getWorldInfo().getWorldName());
-            }
-            else {
-                m_DimensionNames.put(dimType.getId(), "DIM" + dimType.getId());
-            }
+            m_DimensionNames.put(world.provider.getDimension(),  world.getWorldInfo().getWorldName());
         }
 
         if (WarsFtbDynmapConfig.debug_mode){

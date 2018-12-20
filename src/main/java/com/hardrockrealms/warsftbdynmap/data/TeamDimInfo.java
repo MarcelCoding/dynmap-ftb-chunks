@@ -97,7 +97,7 @@ public class TeamDimInfo {
         if (teamDim == null) {
             return false;
         } else {
-            return m_teamID == teamDim.m_teamID && m_dim == teamDim.m_dim;
+            return m_teamID.equals(teamDim.m_teamID) && m_dim == teamDim.m_dim;
         }
     }
 
