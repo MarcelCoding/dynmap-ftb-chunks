@@ -187,19 +187,30 @@ public class WarsFtbDynmapMod
             if (m_bMapInitialized) {
                 // Update the claim display in dynmap for the list of teams.
                 if (!m_ClaimUpdates.isEmpty()) {
-                    for (TeamDimInfo teamDim : m_ClaimUpdates) {
-                        updateTeamClaims(teamDim);
+                    try {
+                        for (TeamDimInfo teamDim : m_ClaimUpdates) {
+                            updateTeamClaims(teamDim);
+                        }
+                    }
+                    catch (NullPointerException ex) {
+                        logger.error("Caught exception - " + ex.getMessage());
+                        ex.printStackTrace();
                     }
 
                     m_ClaimUpdates.clear();
                 }
-            }
-            else {
+            } else {
                 // We can't determine when FTB Claims information will be available so we have to check every so often, for
                 // the most part after the first tickCounter update FTB should be ready to go but we retry a few times before we
                 // consider ourselves initialized.
 
-                m_bMapInitialized = initializeMap();
+                try {
+                    m_bMapInitialized = initializeMap();
+                }
+                catch (NullPointerException ex) {
+                    logger.error("Caught exception - " + ex.getMessage());
+                    ex.printStackTrace();
+                }
 
                 m_InitializeAttemptCount++;
 

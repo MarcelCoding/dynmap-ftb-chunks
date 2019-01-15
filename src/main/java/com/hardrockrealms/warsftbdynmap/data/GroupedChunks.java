@@ -101,6 +101,10 @@ public class GroupedChunks {
                         // be.
                         ChunkEdge.Edge nextEdge = ChunkEdge.Edge.LEFT;
 
+                        if (lastEdgeType == null) {
+                            lastEdgeType = curEdge.edgeType();
+                        }
+
                         switch (lastEdgeType) {
                             case LEFT:
                                 nextEdge = ChunkEdge.Edge.TOP;
